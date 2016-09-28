@@ -183,8 +183,17 @@ namespace ExtensibilitySample
             // new extension
             if (existingExt == null)
             {
-                // get extension properties
-                var properties = await ext.GetExtensionPropertiesAsync() as PropertySet;
+                // get extension properties - if any
+                var properties = new PropertySet();
+                try
+                {
+                    properties = await ext.GetExtensionPropertiesAsync() as PropertySet;
+
+                }
+                catch (ArgumentException)
+                {
+                    // Ignore - no extension properties
+                }
 
                 // get logo 
                 var filestream = await (ext.AppInfo.DisplayInfo.GetLogo(new Windows.Foundation.Size(1, 1))).OpenReadAsync();
